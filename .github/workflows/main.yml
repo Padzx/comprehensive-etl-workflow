@@ -1,0 +1,26 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t padzx/python_airflow:latest .
+
+      - name: Push Docker image
+        run: docker push padzx/python_airflow:latest
+
+      - name: Cleanup Docker images
+        run: docker image prune -f
