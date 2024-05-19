@@ -17,7 +17,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USR }}
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PWD }}
-        run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+        run: echo $DOCKERHUB_PWD | docker login --username $DOCKERHUB_USR  --password-stdin
 
       - name: Build Docker image
         run: docker build -t padzx/python_airflow:latest .
