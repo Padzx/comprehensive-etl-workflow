@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  webserver:
+    image: padzx/airflow:latest
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: 'your_fernet_key'
+      AIRFLOW__WEBSERVER__RBAC: 'True'
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    ports:
+      - "8080:8080"
+    command: ["webserver"]
+
+  scheduler:
+    image: padzx/airflow:latest
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__FERNET_KEY: 'your_fernet_key'
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    command: ["scheduler"]
+
+volumes:
+  postgres_data:

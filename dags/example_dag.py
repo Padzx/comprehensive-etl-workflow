@@ -1,33 +1,39 @@
-from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import PythonOperator
+from datetime import datetime
+
+def extract():
+    # Código para extrair dados
+    pass
+
+def transform():
+    # Código para transformar dados
+    pass
+
+def load():
+    # Código para carregar dados no Data Lake (e.g., S3)
+    pass
 
 default_args = {
     'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
+    'start_date': datetime(2024, 5, 18),
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
 }
 
-dag = DAG(
-    'example_dag',
-    default_args=default_args,
-    description='A simple example DAG',
-    schedule_interval=timedelta(days=1),
-    start_date=datetime(2023, 1, 1),
-    catchup=False,
-)
+with DAG(dag_id='example_etl_dag', default_args=default_args, schedule_interval='@daily', catchup=False) as dag:
+    extract_task = PythonOperator(
+        task_id='extract',
+        python_callable=extract
+    )
 
-start = DummyOperator(
-    task_id='start',
-    dag=dag,
-)
+    transform_task = PythonOperator(
+        task_id='transform',
+        python_callable=transform
+    )
 
-end = DummyOperator(
-    task_id='end',
-    dag=dag,
-)
+    load_task = PythonOperator(
+        task_id='load',
+        python_callable=load
+    )
 
-start >> end
+    extract_task >> transform_task >> load_task
