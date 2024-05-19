@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION
+ARG PYTHON_VERSION=3.9
 FROM python:${PYTHON_VERSION}
 
 # ----> VARS ENV <----
@@ -14,5 +14,6 @@ LABEL description="Docker image for creating the ETL pipeline with Airflow"
 LABEL created="2024-05-18"
 LABEL maintainer="${AUTHOR}"
 
-
 RUN pip install apache-airflow
+
+ENV PYTHONUNBUFFERED=1
