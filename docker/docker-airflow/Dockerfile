@@ -1,40 +1,11 @@
-# Use a imagem Python criada anteriormente como base
-FROM padzx/python:latest
+FROM apache/airflow:2.4.3
 
-# ----> VARS ENV <----
-ARG VERSION
-ARG AUTHOR
 
-# ----> TAGS <----
-LABEL version="${VERSION}"
-LABEL author="${AUTHOR}"
+COPY dags /opt/airflow/dags
 
-# ---> LABELS <---
-LABEL description="Docker image for Apache Airflow"
+COPY config/airflow.cfg /opt/airflow/airflow.cfg
+
+LABEL maintainer="Gabriel Padilha <gabriel.padzx@outlook.com>"
+LABEL version="1.0"
+LABEL description="Imagem Docker para Apache Airflow com DAGs e configurações personalizadas"
 LABEL created="2024-05-18"
-LABEL maintainer="${AUTHOR}"
-
-# Instalar dependências do Airflow
-RUN pip install apache-airflow
-
-# Configurar variáveis de ambiente do Airflow
-ENV AIRFLOW_HOME=/usr/local/airflow
-ENV PYTHONUNBUFFERED=1
-
-# Criar o diretório do Airflow
-RUN mkdir -p $AIRFLOW_HOME
-
-# Definir o diretório de trabalho
-WORKDIR $AIRFLOW_HOME
-
-# Copiar os DAGs para o diretório de trabalho
-COPY dags/ $AIRFLOW_HOME/dags/
-
-# Inicializar a base de dados do Airflow
-RUN airflow db init
-
-# Expor a porta do web server do Airflow
-EXPOSE 8080
-
-# Comando para iniciar o web server do Airflow
-CMD ["airflow", "webserver", "--port", "8080"]
