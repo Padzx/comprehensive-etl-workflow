@@ -3,5 +3,5 @@
 
 ## Added
 
-* Pushed Image Python to Docker Hub
+* Pushed Image Python to Docker Hub.
 
