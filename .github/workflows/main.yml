@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - development
-  
+
   release:
     types: [published]
 
@@ -34,9 +34,28 @@ jobs:
             VERSION=1.0
             AUTHOR="Gabriel Padilha <gabriel.padzx@outlook.com>"
 
+      - name: Build and push Docker Airflow Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker/docker-airflow/Dockerfile
+          push: true
+          tags: padzx/airflow:latest
+          build-args: |
+            VERSION=1.0
+            AUTHOR="Gabriel Padilha <gabriel.padzx@outlook.com>"
+
       - name: Extract metadata for Docker Python Image
         id: meta_python
         uses: docker/metadata-action@v2
         with:
           images: padzx/python
 
+      - name: Extract metadata for Docker Airflow Image
+        id: meta_airflow
+        uses: docker/metadata-action@v2
+        with:
+          images: padzx/airflow
+
+      - name: Cleanup Docker images
+        run: docker image prune -f
