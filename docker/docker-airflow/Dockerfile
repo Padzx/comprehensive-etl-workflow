@@ -6,7 +6,6 @@ WORKDIR /airflow
 
 # Atualiza o índice de pacotes e instala dependências adicionais
 RUN apt-get update && \
-    apt-get install -y python3-pip && \
     apt-get install -y \
     libpq-dev \
     python3-psycopg2 \
