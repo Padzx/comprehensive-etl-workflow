@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Instalar dependências do Apache Airflow a partir do arquivo requirements.txt
-pip install --no-cache-dir -r requirements.txt
+# Fail on any error
+set -e
 
 # Define a função wait_for_port
 wait_for_port() {
@@ -40,6 +40,18 @@ wait_for_port() {
 export AIRFLOW_HOME
 export AIRFLOW__CORE__EXECUTOR
 export AIRFLOW__CORE__FERNET_KEY
+
+# Initialize the database
+airflow db init
+
+# Create admin user if it does not exist
+airflow users create \
+    --username admin \
+    --password admin \
+    --firstname Admin \
+    --lastname User \
+    --role Admin \
+    --email admin@example.com || true
 
 case "$1" in
     webserver)
