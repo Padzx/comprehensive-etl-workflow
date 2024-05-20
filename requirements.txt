@@ -1,0 +1,1 @@
+apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh]~=2.1.0

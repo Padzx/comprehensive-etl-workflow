@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-# Define the wait_for_port function
+# Instalar dependências do Apache Airflow a partir do arquivo requirements.txt
+pip install --no-cache-dir -r requirements.txt
+
+# Define a função wait_for_port
 wait_for_port() {
     local host="$1"
     local port="$2"

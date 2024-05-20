@@ -4,9 +4,6 @@ FROM python:3.9
 # Defina o diretório de trabalho como /usr/local/airflow
 WORKDIR /usr/local/airflow
 
-# Instale as dependências do Apache Airflow
-RUN pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh]~=2.1.0
-
 # Copie o entrypoint.sh para o contêiner
 COPY ./script/entrypoint.sh .
 
