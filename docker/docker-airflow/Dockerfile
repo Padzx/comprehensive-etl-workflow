@@ -7,6 +7,9 @@ WORKDIR /usr/local/airflow
 # Copie o entrypoint.sh para o contêiner
 COPY ./script/entrypoint.sh .
 
+# Conceda permissões de execução ao entrypoint.sh
+RUN chmod +x entrypoint.sh
+
 # Crie um usuário de airflow
 RUN useradd -ms /bin/bash -d /usr/local/airflow airflow
 

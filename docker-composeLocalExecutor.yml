@@ -10,19 +10,17 @@ services:
             - ./pgdata:/var/lib/postgresql/data/pgdata
 
     webserver:
-        build: .
+        image: padzx/airflow:latest
         restart: always
         depends_on:
             - postgres
         environment:
-            - LOAD_EX=n
+            - AIRFLOW__CORE__EXECUTOR=Local
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-            - EXECUTOR=Local
         volumes:
             - ./dags:/usr/local/airflow/dags
         ports:
             - "8080:8080"
-        command: webserver
         healthcheck:
             test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
             interval: 30s
@@ -30,26 +28,23 @@ services:
             retries: 3
 
     scheduler:
-        build: .
+        image: padzx/airflow:latest
         restart: always
         depends_on:
             - webserver
         volumes:
             - ./dags:/usr/local/airflow/dags
         environment:
-            - LOAD_EX=n
+            - AIRFLOW__CORE__EXECUTOR=Local
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-            - EXECUTOR=Local
-        command: scheduler
 
     worker:
-        build: .
+        image: padzx/airflow:latest
         restart: always
         depends_on:
             - scheduler
         volumes:
             - ./dags:/usr/local/airflow/dags
         environment:
+            - AIRFLOW__CORE__EXECUTOR=Local
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-            - EXECUTOR=Local
-        command: worker
