@@ -1,50 +1,72 @@
-version: '2.1'
+version: '3.7'
+
 services:
-    postgres:
-        image: postgres:9.6
-        environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-        volumes:
-            - ./pgdata:/var/lib/postgresql/data/pgdata
+  postgres:
+    image: postgres:latest
+    container_name: airflow-postgres
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
-    webserver:
-        image: padzx/airflow:latest
-        restart: always
-        depends_on:
-            - postgres
-        environment:
-            - AIRFLOW__CORE__EXECUTOR=Local
-            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
-        volumes:
-            - ./dags:/usr/local/airflow/dags
-        ports:
-            - "8080:8080"
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+  webserver:
+    image: padzx/airflow:latest
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - postgres
+      - initdb
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__BASE_URL: http://localhost:8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: webserver
 
-    scheduler:
-        image: padzx/airflow:latest
-        restart: always
-        depends_on:
-            - webserver
-        volumes:
-            - ./dags:/usr/local/airflow/dags
-        environment:
-            - AIRFLOW__CORE__EXECUTOR=Local
-            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+  scheduler:
+    image: padzx/airflow:latest
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      - webserver
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: scheduler
 
-    worker:
-        image: padzx/airflow:latest
-        restart: always
-        depends_on:
-            - scheduler
-        volumes:
-            - ./dags:/usr/local/airflow/dags
-        environment:
-            - AIRFLOW__CORE__EXECUTOR=Local
-            - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+  initdb:
+    image: padzx/airflow:latest
+    container_name: airflow-initdb
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    entrypoint: ["/bin/bash", "-c"]
+    command: "airflow db init && sleep 5"
+
+  create_user:
+    image: padzx/airflow:latest
+    container_name: airflow-create-user
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    entrypoint: airflow users create -u admin -p admin -f Admin -l User -r Admin -e admin@example.com
