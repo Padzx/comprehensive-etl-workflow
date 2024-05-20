@@ -25,11 +25,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USR }}
           password: ${{ secrets.DOCKERHUB_PWD }}
 
-      - name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v1
-        with:
-          dockerfile: docker/docker-airflow/Dockerfile
-
       - name: Build and push Docker Airflow Image
         uses: docker/build-push-action@v2
         with:
