@@ -5,11 +5,12 @@ LABEL maintainer="Gabriel Padilha <gabriel.padzx@outlook.com>"
 WORKDIR /airflow
 
 # Atualiza o índice de pacotes e instala dependências adicionais
-RUN apt-get update && apt-get install -y python3-pip
-RUN apt-get install -y libpq-dev
-RUN apt-get install -y python3-psycopg2
-RUN apt-get clean
-
+RUN apt-get update && \
+    apt-get install -y python3-pip && \
+    apt-get install -y \
+    libpq-dev \
+    python3-psycopg2 \
+    && apt-get clean
 
 # Instala o Celery e Redis para CeleryExecutor
 RUN pip install 'apache-airflow[celery]' redis
