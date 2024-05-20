@@ -29,7 +29,7 @@ ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgr
 COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 
 # Copia o script de inicialização do Airflow para o diretório de trabalho
-COPY ./scripts/entrypoint.sh .
+COPY ./script/entrypoint.sh .
 
 # Concede permissões de execução ao script de inicialização
 RUN chmod +x entrypoint.sh
