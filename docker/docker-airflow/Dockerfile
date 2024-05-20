@@ -57,7 +57,7 @@ RUN set -ex \
 RUN pip install 'jinja2<3.1.0' 'markupsafe<2.1.0' 'SQLAlchemy<2.0'
 
 # Copy the entrypoint script
-COPY entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
+COPY ./script/entrypoint.sh ${AIRFLOW_HOME}/entrypoint.sh
 RUN chmod +x ${AIRFLOW_HOME}/entrypoint.sh
 
 # Set the working directory
