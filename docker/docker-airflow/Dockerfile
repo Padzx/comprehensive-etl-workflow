@@ -4,11 +4,11 @@ FROM python:3.9
 # Defina o diretório de trabalho como /usr/local/airflow
 WORKDIR /usr/local/airflow
 
+# Copie o arquivo airflow.cfg para o contêiner
+COPY ./config/airflow.cfg .
+
 # Copie o entrypoint.sh para o contêiner
 COPY ./script/entrypoint.sh .
-
-# Conceda permissões de execução ao entrypoint.sh
-RUN chmod +x entrypoint.sh
 
 # Crie um usuário de airflow
 RUN useradd -ms /bin/bash -d /usr/local/airflow airflow
