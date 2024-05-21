@@ -3,7 +3,7 @@
 # Fail on any error
 set -e
 
-# Define a função wait_for_port
+# function wait_for_port
 wait_for_port() {
     local host="$1"
     local port="$2"
