@@ -7,4 +7,5 @@
 
 * entrypoint.sh file to run the defined settings. [Entrypoint File](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/script/entrypoint.sh)
 
-* Added a workflow for building images and uploading them to docker hub.[Workflow](https://github.com/Padzx/comprehensive-etl-workflow/actions)
+* Added a workflow for building images and uploading them to docker hub.
+ [Workflow](https://github.com/Padzx/comprehensive-etl-workflow/actions)
