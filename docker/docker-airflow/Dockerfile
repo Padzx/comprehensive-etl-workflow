@@ -21,15 +21,19 @@ ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgr
 COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 
 # Copia o script de inicialização do Airflow para o diretório de trabalho
-COPY ./script/entrypoint.sh .
+COPY ./script/entrypoint.sh /airflow/entrypoint.sh
+
+# Adiciona comandos de depuração para verificar o arquivo
+RUN ls -l /airflow/entrypoint.sh
+RUN cat /airflow/entrypoint.sh
 
 # Certifique-se de que o entrypoint.sh é executável
-RUN chmod +x entrypoint.sh
+RUN chmod +x /airflow/entrypoint.sh
 
 EXPOSE 8080
 
 # Define o ponto de entrada para o contêiner
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/airflow/entrypoint.sh"]
 
 # Define o comando padrão para iniciar o webserver
 CMD ["webserver"]
