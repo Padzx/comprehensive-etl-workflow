@@ -23,9 +23,6 @@ COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 # Copia o script de inicialização do Airflow para o diretório raiz
 COPY ./script/entrypoint.sh /entrypoint.sh
 
-# Define permissões de execução para o script de inicialização
-RUN chmod +x /entrypoint.sh
-
 EXPOSE 8080 5555 8793
 
 # Define o comando padrão a ser executado quando o contêiner for iniciado
