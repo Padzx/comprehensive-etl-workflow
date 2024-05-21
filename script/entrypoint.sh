@@ -33,7 +33,7 @@ wait_for_port() {
 }
 
 # Set default values for environment variables
-: "${AIRFLOW_HOME:="/usr/local/airflow"}"
+: "${AIRFLOW_HOME:="/airflow"}"
 : "${AIRFLOW__CORE__EXECUTOR:="${EXECUTOR:-SequentialExecutor}"}"
 : "${AIRFLOW__CORE__FERNET_KEY:="${FERNET_KEY:-$(python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())')}"}"
 

@@ -23,7 +23,13 @@ COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 # Copia o script de inicialização do Airflow para o diretório de trabalho
 COPY ./script/entrypoint.sh .
 
+# Certifique-se de que o entrypoint.sh é executável
+RUN chmod +x entrypoint.sh
+
 EXPOSE 8080
 
-# Define o comando padrão a ser executado quando o contêiner for iniciado
-CMD ["./entrypoint.sh"]
+# Define o ponto de entrada para o contêiner
+ENTRYPOINT ["./entrypoint.sh"]
+
+# Define o comando padrão para iniciar o webserver
+CMD ["webserver"]
