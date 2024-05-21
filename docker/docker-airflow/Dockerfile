@@ -14,26 +14,20 @@ ENV AIRFLOW_HOME=/airflow
 ENV LANG=C.UTF-8
 
 # Define variáveis de ambiente para personalizar a configuração do Airflow
-ENV AIRFLOW__CORE__FERNET_KEY=zjT6VlDV0ew8-4wJc8oM1hx8Y2PlpDs5mLH7C2Xsy0A=
-ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+ENV AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
+ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=${AIRFLOW__CORE__SQL_ALCHEMY_CONN}
 
 # Copia o arquivo airflow.cfg para o diretório de configuração do Airflow
 COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
 
-# Copia o script de inicialização do Airflow para o diretório de trabalho
-COPY ./script/entrypoint.sh /airflow/entrypoint.sh
+# Copia o script de inicialização do Airflow para o diretório raiz
+COPY ./script/entrypoint.sh /entrypoint.sh
 
-# Adiciona comandos de depuração para verificar o arquivo
-RUN ls -l /airflow/entrypoint.sh
-RUN cat /airflow/entrypoint.sh
+# Define permissões de execução para o script de inicialização
+RUN chmod +x /entrypoint.sh
 
-# Certifique-se de que o entrypoint.sh é executável
-RUN chmod +x /airflow/entrypoint.sh
+EXPOSE 8080 5555 8793
 
-EXPOSE 8080
-
-# Define o ponto de entrada para o contêiner
-ENTRYPOINT ["/airflow/entrypoint.sh"]
-
-# Define o comando padrão para iniciar o webserver
+# Define o comando padrão a ser executado quando o contêiner for iniciado
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]
