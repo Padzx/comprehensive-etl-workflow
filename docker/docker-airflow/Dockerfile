@@ -1,3 +1,5 @@
+# Author: Gabriel Padilha <Padzx>
+
 FROM apache/airflow:latest
 LABEL maintainer="Gabriel Padilha <gabriel.padzx@outlook.com>"
 
