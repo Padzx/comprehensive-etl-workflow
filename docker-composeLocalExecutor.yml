@@ -12,6 +12,8 @@ services:
       - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - airflow-net
 
   webserver:
     image: padzx/airflow:latest
@@ -22,7 +24,7 @@ services:
       - initdb
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__WEBSERVER__BASE_URL: http://localhost:8080
     ports:
       - "8080:8080"
@@ -30,7 +32,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-    command: webserver
+    command: ["bash", "-c", "airflow webserver"]
 
   scheduler:
     image: padzx/airflow:latest
@@ -41,32 +43,27 @@ services:
       - postgres
     environment:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-    command: scheduler
+    command: ["bash", "-c", "airflow scheduler"]
 
   initdb:
     image: padzx/airflow:latest
     container_name: airflow-initdb
     environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
     entrypoint: ["/bin/bash", "-c"]
-    command: "airflow db init && sleep 5"
+    command: ["airflow db init && sleep 5"]
+    networks:
+      - airflow-net
 
-  create_user:
-    image: padzx/airflow:latest
-    container_name: airflow-create-user
-    environment:
-      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
-      - ./plugins:/opt/airflow/plugins
-    entrypoint: airflow users create -u admin -p admin -f Admin -l User -r Admin -e admin@example.com
+networks:
+  airflow-net:
+    driver: bridge
