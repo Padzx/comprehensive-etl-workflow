@@ -1,2 +1,4 @@
 pgdata
 postgres-data
+logs
+logs-postgres
