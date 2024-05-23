@@ -1,3 +1,9 @@
+# LocalExecutor Apache Airflow.
+# An simple structured to initialize the service Apache Airflow LocalExecutor.
+# For workflows that are not at all complex and completely fast, it is recommended that you use LocalExecutor.
+
+# -------------------------------- # -----------------------
+
 version: '3.7'
 
 services:
@@ -22,6 +28,8 @@ services:
     networks:
       - airflow-net
 
+# ------ DB Init ------
+
   initdb:
     image: padzx/airflow:latest
     container_name: airflow-initdb
@@ -36,6 +44,8 @@ services:
     networks:
       - airflow-net
 
+# ------ Apache Airflow Webserver ------
+
   webserver:
     image: padzx/airflow:latest
     container_name: airflow-webserver
@@ -48,7 +58,7 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
       AIRFLOW__WEBSERVER__BASE_URL: http://localhost:8080
     ports:
-      - "8080:8080"
+      - "8080:8080" 
     volumes:
       - ./dags:/airflow/dags
       - ./logs:/usr/local/airflow/logs
@@ -56,6 +66,8 @@ services:
     command: ["bash", "-c", "airflow webserver"]
     networks:
       - airflow-net
+
+# ------ Apache Airflow Scheduler ------
 
   scheduler:
     image: padzx/airflow:latest
@@ -74,6 +86,8 @@ services:
     command: ["bash", "-c", "airflow scheduler"]
     networks:
       - airflow-net
+
+# ------ Networks ------
 
 networks:
   airflow-net:
