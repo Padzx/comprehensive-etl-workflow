@@ -22,25 +22,19 @@ services:
     networks:
       - airflow-net
 
-
-  # ------ DB Init ------
-
   initdb:
     image: padzx/airflow:latest
     container_name: airflow-initdb
     environment:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
     volumes:
-      - ./dags:/usr/local/airflow/dags
+      - ./dags:/airflow/dags
       - ./logs:/usr/local/airflow/logs
       - ./plugins:/usr/local/airflow/plugins
     entrypoint: ["/bin/bash", "-c"]
     command: ["airflow db init && sleep 5"]
     networks:
       - airflow-net
-
-
-  # ------ Webserver Apache Airflow ------
 
   webserver:
     image: padzx/airflow:latest
@@ -56,14 +50,12 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./dags:/usr/local/airflow/dags
+      - ./dags:/airflow/dags
       - ./logs:/usr/local/airflow/logs
       - ./plugins:/usr/local/airflow/plugins
     command: ["bash", "-c", "airflow webserver"]
     networks:
       - airflow-net
-
-  # ------ Scheduler Apache Airflow ------
 
   scheduler:
     image: padzx/airflow:latest
@@ -76,14 +68,12 @@ services:
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
     volumes:
-      - ./dags:/usr/local/airflow/dags
+      - ./dags:/airflow/dags
       - ./logs:/usr/local/airflow/logs
       - ./plugins:/usr/local/airflow/plugins
     command: ["bash", "-c", "airflow scheduler"]
     networks:
       - airflow-net
-
-  # ------ Networks ------
 
 networks:
   airflow-net:
