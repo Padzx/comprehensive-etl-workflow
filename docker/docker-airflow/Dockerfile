@@ -1,38 +1,32 @@
+# Author: Gabriel Padilha <Padzx>
 
 FROM apache/airflow:latest
 LABEL maintainer="Gabriel Padilha <gabriel.padzx@outlook.com>"
 
-
-
-# ----> TAGS <-----
-
+# Tags
 LABEL description="Custom Apache Airflow image"
 LABEL version="1.0"
 LABEL repository="https://github.com/Padzx/comprehensive-etl-workflow.git"
 
+# Set the working directory
 WORKDIR /airflow
 
-# Install Celery and Redis to CeleryExecutor
+# Install Celery and Redis for CeleryExecutor
 RUN pip install 'apache-airflow[celery]' redis
 
-# PostgreSQL location of Airflow
+# Set environment variables
 ENV AIRFLOW_HOME=/airflow
-
-# UTF-8 default
 ENV LANG=C.UTF-8
-
-# Env Vars
 ENV AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
 ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=${AIRFLOW__CORE__SQL_ALCHEMY_CONN}
 
-
-COPY ./config/airflow.cfg $AIRFLOW_HOME/airflow.cfg
-
-
+# Copy the configuration files
+COPY ./config/airflow.cfg /usr/local/airflow/airflow.cfg
 COPY ./script/entrypoint.sh /entrypoint.sh
 
+# Expose necessary ports
 EXPOSE 8080 5555 8793
 
-# Default command to be executed when the container starts
+# Set the entrypoint and default command
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]

@@ -1,3 +1,5 @@
-postgres-data/
 pgdata
-.env
+postgres-data
+logs
+logs-postgres
+plugins
