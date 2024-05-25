@@ -1,0 +1,127 @@
+# CeleryExecutor Apache Airflow
+# An simple Structured to initialize the services Apache Airflow Celery Executor
+# For complex environments that require horizontal scalability, it is recommended to use CeleryExecutor.
+
+# -------------------------------- # -----------------------
+
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: airflow-postgres
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    networks:
+      - airflow-net
+
+# ------ REDIS ------
+
+  redis:
+    image: redis:latest
+    container_name: airflow-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - airflow-net
+
+# ----- InitDB ------
+
+  initdb:
+    image: padzx/airflow:latest
+    container_name: airflow-initdb
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    entrypoint: ["/bin/bash", "-c"]
+    command: ["airflow db init && sleep 5"]
+    networks:
+      - airflow-net
+
+# ------ Apache Airflow Webserver ------
+
+  webserver:
+    image: padzx/airflow:latest
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - postgres
+      - initdb
+      - redis
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__BASE_URL: http://localhost:8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    command: ["bash", "-c", "airflow webserver"]
+    networks:
+      - airflow-net
+
+# ------ Apache Airflow Scheduler ------
+
+  scheduler:
+    image: padzx/airflow:latest
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      - webserver
+      - postgres
+      - redis
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    command: ["bash", "-c", "airflow scheduler"]
+    networks:
+      - airflow-net
+
+# ------ Worker ------
+
+  worker:
+    image: padzx/airflow:latest
+    container_name: airflow-worker
+    restart: always
+    depends_on:
+      - webserver
+      - scheduler
+      - postgres
+      - redis
+    environment:
+      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./logs:/usr/local/airflow/logs
+      - ./plugins:/usr/local/airflow/plugins
+    command: ["bash", "-c", "airflow celery worker"]
+    networks:
+      - airflow-net
+
+# ----- Networks ------
+
+networks:
+  airflow-net:
+    driver: bridge
