@@ -9,3 +9,9 @@
 
 * Added a workflow for building images and uploading them to docker hub.
  [Workflow](https://github.com/Padzx/comprehensive-etl-workflow/actions)
+
+ # [1.0.0] - 2024-05-24
+
+ ## Added
+
+ * Added CeleryExecutor with Redis. [Celery Executor](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/docker-composeCeleryExecutor.yml)
