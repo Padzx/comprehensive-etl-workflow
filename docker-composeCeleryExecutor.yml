@@ -94,7 +94,7 @@ services:
       - ./plugins:/usr/local/airflow/plugins
     command: ["bash", "-c", "airflow scheduler"]
     networks:
-      - airflow-net
+      - airflow-net 
 
 # ------ Worker ------
 
