@@ -3,7 +3,7 @@ name: CI/CD for Apache Airflow on AWS
 on:
   push:
     branches-ignore:
-      - development 
+      - development
 
 jobs:
   deploy:
@@ -26,16 +26,23 @@ jobs:
           aws-region: us-east-1
 
       - name: Terraform Init
-        working-directory: ./ci/main.tf
+        working-directory: ./ci
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: ./ci/main.tf
+        working-directory: ./ci
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        working-directory: ./ci/main.tf
+        working-directory: ./ci
         run: terraform apply -auto-approve tfplan
+
+      - name: Get EC2 Instance IP
+        id: ec2-ip
+        run: |
+          INSTANCE_ID=$(terraform output -raw ec2_instance_id)
+          PUBLIC_IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
+          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
 
       - name: Run setup script
         env:
@@ -43,4 +50,4 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@<EC2_INSTANCE_PUBLIC_IP> 'bash -s' < ./script/setup.sh
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$PUBLIC_IP 'bash -s' < ./script/setup.sh
