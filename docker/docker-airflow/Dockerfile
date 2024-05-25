@@ -3,18 +3,16 @@
 FROM apache/airflow:latest
 LABEL maintainer="Gabriel Padilha <gabriel.padzx@outlook.com>"
 
-# Tags
+# ------> Tags <------
 LABEL description="Custom Apache Airflow image"
 LABEL version="1.0"
 LABEL repository="https://github.com/Padzx/comprehensive-etl-workflow.git"
 
-# Set the working directory
 WORKDIR /airflow
 
-# Install Celery and Redis for CeleryExecutor
+# ------> Install Celery and Redis for CeleryExecutor <------
 RUN pip install 'apache-airflow[celery]' redis
 
-# Set environment variables
 ENV AIRFLOW_HOME=/airflow
 ENV LANG=C.UTF-8
 ENV AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
