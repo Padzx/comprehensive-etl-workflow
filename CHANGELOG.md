@@ -15,3 +15,13 @@
  ## Added
 
  * Added CeleryExecutor with Redis. [Celery Executor](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/docker-composeCeleryExecutor.yml)
+
+ # [1.0.0] - 2024-05-25
+
+ ## Added
+
+* Added a new workflow Github Actions for automate the environment AWS ETL Workflow. [Workflow AWS](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/.github/workflows/ci-cd.yml)
+
+* Added a new Shell Script file (setup.ssh) for the config environment resources. [Setup File](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/script/setup.sh)
+
+* Added new folder and a new file (main.tf) for incialize the environment AWS Apache Airflow. [Terraform Script](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/ci/main.tf)
