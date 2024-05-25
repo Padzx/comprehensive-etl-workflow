@@ -22,7 +22,7 @@ ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=${AIRFLOW__CORE__SQL_ALCHEMY_CONN}
 COPY ./config/airflow.cfg /usr/local/airflow/airflow.cfg
 COPY ./script/entrypoint.sh /entrypoint.sh
 
-# Expose necessary ports
+# Expose necessary ports 
 EXPOSE 8080 5555 8793
 
 # Set the entrypoint and default command
