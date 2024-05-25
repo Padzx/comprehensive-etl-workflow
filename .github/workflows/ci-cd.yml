@@ -3,7 +3,7 @@ name: CI/CD for Apache Airflow on AWS
 on:
   push:
     branches-ignore:
-      - development
+      - development 
 
 jobs:
   deploy:
