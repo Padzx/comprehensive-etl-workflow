@@ -1,44 +1,35 @@
 #!/bin/bash
 
-# Setup script to configure the EC2 instance
+# Fail script on any error
+set -e
 
-# Update and install necessary packages
-sudo apt-get update
-sudo apt-get install -y python3-pip
+# Ensure the required environment variables are set
+if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+  echo "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables must be set"
+  exit 1
+fi
 
-# Install Docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
+# Install Terraform if not installed
+if ! command -v terraform &> /dev/null; then
+  echo "Terraform not found. Installing..."
+  wget https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip
+  unzip terraform_1.0.0_linux_amd64.zip
+  sudo mv terraform /usr/local/bin/
+  rm terraform_1.0.0_linux_amd64.zip
+fi
 
-# Add the user to the docker group
-sudo usermod -aG docker $USER
+# Create a Terraform variables file
+cat <<EOF > terraform.tfvars
+aws_access_key = "$AWS_ACCESS_KEY_ID"
+aws_secret_key = "$AWS_SECRET_ACCESS_KEY"
+EOF
 
-# Enable Docker service to start on boot
-sudo systemctl enable docker
+# Navigate to the Terraform configuration directory
+cd "$(dirname "$0")/../ci"
 
-# Install Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+# Initialize Terraform
+terraform init
 
-# Clone the repository
-git clone https://github.com/Padzx/comprehensive-etl-workflow /home/ubuntu/airflow-setup
-
-# Navigate to the cloned repository directory
-cd /home/ubuntu/airflow-setup
-
-# Run Docker Compose to start Airflow
-sudo docker-compose up -d
-
-# Install boto3 for AWS interactions
-pip3 install boto3
-
-# Set Airflow environment variables
-echo "export AIRFLOW_HOME=~/airflow" >> ~/.bashrc
-echo "export AIRFLOW__CORE__LOAD_EXAMPLES=False" >> ~/.bashrc
-source ~/.bashrc
-
-# Initialize Airflow
-sudo docker-compose run airflow-init
-sudo docker-compose up -d
-
-# Optional: Add any other setup or configuration steps needed
+# Plan and apply the Terraform configuration
+terraform plan -out=tfplan
+terraform apply -auto-approve tfplan
