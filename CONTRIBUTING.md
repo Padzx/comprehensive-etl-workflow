@@ -16,4 +16,4 @@ Hello everyone, thank you for your interest in contributing to the project, and 
 
 6. Push to your feature branch;
 
-7. Create a new pull request from your feature branch to the main branch.
+7. Create a new pull request from your feature branch to the **main** branch.
