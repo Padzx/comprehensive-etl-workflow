@@ -23,5 +23,5 @@ jobs:
       - name: Set up Terraform
         run: |
           echo "${{ secrets.AWS_ACCESS_KEY_ID }}" > key.pem
-          chmod +x /script/setup.sh
-          /script/setup.sh
+          chmod +x ./script/setup.sh
+          ./script/setup.sh
