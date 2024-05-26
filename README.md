@@ -12,7 +12,8 @@
 
 ## Introduction
 
-This project has the main objective of showing how an ETL (Extract, Transform and Load) process works in a production environment. Nowadays, data has become a totally precious and important material for any company, since data bring results or insights for decision making, therefore the ETL process is extremely important so that we can always have data available so that we can generate even more value.
+This project has the main objective of showing how an ETL (Extract, Transform and Load) process works in a production environment. Nowadays, data has become a totally precious and important material for any company, since data bring results or insights for decision making, therefore the ETL process is extremely important so that we can always have data available so that we can generate even more value, this example we use **Apache Airflow**, **Postgres**, **Redis** and **AWS**.
 
 >**Note:**
 > If you want to know what ETL is and how it works: [ETL](https://www.oracle.com/pt/integration/what-is-etl/)
+
