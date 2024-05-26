@@ -28,6 +28,21 @@ Apache Airflow is a powerful platform used to programmatically create, schedule,
 > If want know more about Apache Airflow: [Apache Airflow](https://airflow.apache.org/docs/apache-airflow/stable/index.html)
 
 
+### Why Docker-Compose?
+
+We have chosen to deploy Apache Airflow using Docker and Docker Compose due to the numerous benefits these tools offer:
+
+### Docker 
+
+Docker is a platform that allows you to package applications and their dependencies into a standardized unit called a container. Here are some key benefits:
+
+- **Consistency**: Ensures that your application runs the same way, regardless of where it is deployed
+
+- **Isolation**: Each container runs in its own isolated environment, which helps in avoiding conflicts between different applications.
+
+
+
+
 
 
 
