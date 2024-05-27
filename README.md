@@ -9,7 +9,7 @@
 - [Introduction](#introduction)
 - [Apache Airflow with Docker and Docker-Compose](#apache-airflow-with-docker-and-docker-compose)
 - [Amazon Web Services](#integrated-with-amazon-web-services)
-
+- [Using the Apache Airflow](#initializing-the-apache-airflow-environment)
 
 
 ## Introduction
@@ -107,3 +107,8 @@ Using Amazon S3 in conjunction with Apache Airflow enhances ETL processes by pro
 >**Note:**
 >To start the Apache Airflow environment, it is expected that you have Docker and Docker-Compose installed locally on your machine.
 
+To start the Apache Spark environment, you need to be in the root directory, so just choose which service you will start (**LocalExecutor** and **Celery Executor**), using this bash command:
+
+```shell
+docker-compose -f docker-composeLocalExecutor up -d
+```
