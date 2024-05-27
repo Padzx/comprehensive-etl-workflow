@@ -122,10 +122,3 @@ docker-compose -f docker-composeLocalExecutor up -d
 ```shell
 docker-compose -f docker-composeCeleryExeutor up -d
 ```
-
-**LocalExecutor Stack:**
-     ```markdown
-     | Left Align | Center Align | Right Align |
-     |:-----------|:-------------:|------------:|
-     | Data       | Data          | Data        |
-     ```
