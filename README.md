@@ -131,4 +131,4 @@ docker-compose -f docker-composeCeleryExeutor up -d
 ### Apache Airflow Webserver:
 # Project Title
 
-![Screenshot](./docs/img/apache.png)
+![Screenshot](./docs/img/airflow.png)
