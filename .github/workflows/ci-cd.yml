@@ -1,4 +1,4 @@
-name: CI/CD for Apache Airflow on AWS
+name: CI/CD for Apache Airflow on AWS 
 
 on:
   push:
