@@ -97,3 +97,13 @@ For this project, Amazon Simple Storage Service (S3) was selected as the primary
 - **Security**: S3 provides robust security features to control access to data, including encryption, access management policies, and logging capabilities. This ensures that your data is secure and compliance requirements are met.
 
 Using Amazon S3 in conjunction with Apache Airflow enhances ETL processes by providing a reliable and scalable storage solution that simplifies data management and access. This combination enables efficient data extraction, transformation, and loading, ensuring that your ETL pipelines are robust and performant.
+
+
+>**Note:**
+> If wanna know more about the Amazon Web Services: [Amazon Web Services](https://docs.aws.amazon.com/)
+
+## Initializing the Apache Airflow Environment
+
+>**Note:**
+>To start the Apache Airflow environment, it is expected that you have Docker and Docker-Compose installed locally on your machine.
+
