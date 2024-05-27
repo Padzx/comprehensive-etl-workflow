@@ -10,6 +10,7 @@
 - [Apache Airflow with Docker and Docker-Compose](#apache-airflow-with-docker-and-docker-compose)
 - [Amazon Web Services](#integrated-with-amazon-web-services)
 - [Using the Apache Airflow](#initializing-the-apache-airflow-environment)
+- [AWS Connect](#connecting-the-apache-airflow-to-aws)
 
 
 ## Introduction
@@ -131,5 +132,23 @@ docker-compose -f docker-composeCeleryExeutor up -d
 ### Apache Airflow:
 
 ![Screenshot](./docs/img/airflow.png)
+
+## Connecting the Apache Airflow to AWS 
+
+To create a connection to AWS to transfer data to the S3 bucket, you need to perform a few steps:
+
+- **Creation Github Secrets:** FERNET_KEY and SECRET_KEY
+
+- **Insert the Secrets:** Insert the secrets into the [ci-cd file](https://github.com/Padzx/comprehensive-etl-workflow/blob/main/.github/workflows/ci-cd.yml)
+
+- **Updating docker-compsoe**: Update both docker-compose with the environment variables.
+
+- **Connection Airflow to S3:** 
+- Go to Admin "Connectinos" 
+- Click in "Add New Record"
+- Configure Connections:
+```shell
+{"aws_access_key_id": "YOUR_ACCESS_KEY", "aws_secret_access_key": "YOUR_SECRET_KEY"}
+```
 
 
