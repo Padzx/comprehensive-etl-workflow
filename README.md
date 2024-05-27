@@ -114,6 +114,8 @@ To start the Apache Spark environment, you need to be in the root directory, so 
 git clone https://github.com/Padzx/comprehensive-etl-workflow.git
 ```
 
+**Choose which service to launch:**
+
 ```shell
 docker-compose -f docker-composeLocalExecutor up -d
 ```
@@ -122,3 +124,8 @@ docker-compose -f docker-composeCeleryExeutor up -d
 ```
 
 **LocalExecutor Stack:**
+     ```markdown
+     | Left Align | Center Align | Right Align |
+     |:-----------|:-------------:|------------:|
+     | Data       | Data          | Data        |
+     ```
