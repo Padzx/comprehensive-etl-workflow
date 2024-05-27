@@ -17,7 +17,7 @@ resource "aws_s3_bucket_versioning" "airflow_bucket_versioning" {
   versioning_configuration {
     status = "Enabled"
   }
-}
+} 
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "airflow_bucket_encryption" {
   bucket = aws_s3_bucket.airflow_bucket.id
