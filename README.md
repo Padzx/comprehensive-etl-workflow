@@ -112,3 +112,6 @@ To start the Apache Spark environment, you need to be in the root directory, so 
 ```shell
 docker-compose -f docker-composeLocalExecutor up -d
 ```
+```shell
+docker-compose -f docker-composeCeleryExeutor up -d
+```
