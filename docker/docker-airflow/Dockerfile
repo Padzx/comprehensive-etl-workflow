@@ -31,4 +31,4 @@ EXPOSE 8080 5555 8793
 
 # ------> Set the entrypoint and default command <------
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["webserver"]
+CMD ["webserver"] 
