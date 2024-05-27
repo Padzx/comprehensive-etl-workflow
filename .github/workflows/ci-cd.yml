@@ -1,8 +1,8 @@
-name: CI/CD for Apache Airflow on AWS
+name: CI/CD for Apache Airflow on AWS 
 
 on:
   push:
-    branches:
+    branches-ignore:
       - development
 
 jobs:
@@ -24,3 +24,4 @@ jobs:
         run: |
           chmod +x ./script/setup.sh
           ./script/setup.sh
+
