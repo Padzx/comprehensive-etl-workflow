@@ -22,5 +22,8 @@ jobs:
 
       - name: Set up Terraform
         run: |
+          export FERNET_KEY=${{ secrets.FERNET_KEY }}
+          export SECRET_KEY=${{ secrets.SECRET_KEY }}
           chmod +x ./script/setup.sh
           ./script/setup.sh
+

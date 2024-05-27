@@ -23,7 +23,7 @@ ENV AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
 ENV AIRFLOW__CORE__SQL_ALCHEMY_CONN=${AIRFLOW__CORE__SQL_ALCHEMY_CONN}
 
 # ------> Copy the configuration files <------
-COPY ./config/airflow.cfg /usr/local/airflow/airflow.cfg
+COPY ./config/airflow.cfg /airflow/airflow.cfg
 COPY ./script/entrypoint.sh /entrypoint.sh
 
 # ------> Expose necessary ports <------
