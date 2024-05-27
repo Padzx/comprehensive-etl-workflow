@@ -109,9 +109,16 @@ Using Amazon S3 in conjunction with Apache Airflow enhances ETL processes by pro
 
 To start the Apache Spark environment, you need to be in the root directory, so just choose which service you will start (**LocalExecutor** and **Celery Executor**), using this bash command:
 
+Clone the repository:
+```bash
+https://github.com/Padzx/comprehensive-etl-workflow/tree/main
+```
+
 ```shell
 docker-compose -f docker-composeLocalExecutor up -d
 ```
 ```shell
 docker-compose -f docker-composeCeleryExeutor up -d
 ```
+
+**LocalExecutor Stack:**
