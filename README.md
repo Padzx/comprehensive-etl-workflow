@@ -144,7 +144,7 @@ To create a connection to AWS to transfer data to the S3 bucket, you need to per
 - **Updating docker-compsoe**: Update both docker-compose with the environment variables.
 
 - **Connection Airflow to S3:** 
-- Go to Admin "Connectinos" 
+- Go to Admin "Connections" 
 - Click in "Add New Record"
 - Configure Connections:
 ```shell
