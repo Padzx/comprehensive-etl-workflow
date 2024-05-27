@@ -13,6 +13,10 @@ WORKDIR /airflow
 # ------> Install Celery and Redis for CeleryExecutor <------
 RUN pip install 'apache-airflow[celery]' redis
 
+# ------> Copy requirements.txt and install dependencies <------
+COPY requirements.txt /airflow/requirements.txt
+RUN pip install --no-cache-dir -r /airflow/requirements.txt
+
 ENV AIRFLOW_HOME=/airflow
 ENV LANG=C.UTF-8
 ENV AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
